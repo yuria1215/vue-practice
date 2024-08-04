@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>msg : {{ message }}</h1>
+      <app-component />
+    </div>
+  
+    <template id="test">
+      <h2>TEST: {{test}}</h2>
+    </template>
+  
+    <script>
+      const { createApp, defineComponent } = Vue;
+
+      // 定义组件
+      const AppComponent = defineComponent({
+        template: '#test',
+        data() {
+          return {
+            test: '123'
+          }
+        }
+      });
+  
+      createApp({
+        data() {
+          return {
+            message: "Hello Vue!",
+          };
+        },
+        components: {
+          'app-component': AppComponent,
+        }
+      }).mount("#app");
+    </script>
+  </body>
+</html>
