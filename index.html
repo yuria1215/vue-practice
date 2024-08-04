@@ -4,20 +4,92 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>vue-practice</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script src="/js/vue.global.min.js"></script>
+    
+    <style>
+      .red {
+        color: red;
+      }
+      .blue {
+        color: blue;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
+      <!-- v-bind -->
+      <!-- 標籤裡需要動態更換的東西才會用{{}} -->
+      <h1 v-bind:class="h1_class">{{h1_title}}</h1>
+      <h2 :class="h1_class">v-bind縮寫: (語法糖)</h2>
+
+      <!-- v-on (事件 event) -->
+      <button v-on:click="clickButton">換顏色</button><br />
+      <!-- alt+shift+下 複製整條-->
+      <!-- 事件縮寫"@" -->
+      <button @click="clickButton2">v-on縮寫@ (語法糖)</button>
+
+      <ul>
+        <!-- <li v-for="a in b"></li>，b只會是陣列/物件/數字，最好都用陣列 -->
+        <li v-for="city in li_array">{{city}}</li>
+      </ul>
+
+      <ul>
+        <!-- <li v-for="a in b"></li>，b只會是陣列/物件/數字，最好都用陣列 -->
+        <li v-for="student in li_students">
+          姓名:{{student.name}} / 電話:{{student.phone}} / 年齡:{{student.age}}
+        </li>
+      </ul>
+      <!-- v-model 雙向綁定，input等輸入型標籤建議優先用-->
+      <input type="text" v-model="search"><button>輸入</button><br>
+
+      <!-- 非雙向綁定 -->
+      <input type="text" :value="input_value2" @input="change_input_value2"><button>輸入2</button><br>
     </div>
-  
+
     <script>
       const { createApp, defineComponent } = Vue;
 
       createApp({
+        // data裡放需要動態換的變數/屬性
         data() {
           return {
-            message: "Hello Vue!",
+            // {屬性:"屬性值"}
+            // v-bind
+            h1_title: "Hello Vue!",
+            h1_class: "blue",
+            input_value2: "不是雙向2",
+
+            // v-for
+            li_array: ["桃園", "台北"],
+            li_students: [
+              { name: "小名", phone: "0912254", age: "18" },
+              { name: "小花", phone: "0913300", age: "15" },
+            ],
+
+            // v-model，通常輸入框標籤input裡的值都預設為"字串"
+            search: "輸入框"
           };
+        },
+        // methods裡放函數function
+        methods: {
+          // v-on function 寫在這
+          clickButton: function () {
+            console.log("clickButton");
+            // 要拿vue實例裡的東西都要用this開頭
+            this.h1_class = "red";
+          },
+          // 語法糖:可以省略 : function，通常都寫這種
+          clickButton2() {
+            console.log("clickButton2");
+            // 要拿vue實例裡的東西都要用this開頭
+            this.h1_class = this.h1_class === "red" ? "blue" : "red";
+          },
+
+          change_input_value2(e){
+            console.log("change_input_value2",e.target.value);
+            this.input_value2 = e.target.value
+          }
         },
       }).mount("#app");
     </script>
